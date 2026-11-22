@@ -9,7 +9,7 @@ import il.ac.tau.cs.software1.math.Vector2;
 public class PacmanPlayer extends PacmanGameObject {
 		
 	protected int score = 0;
-	
+	private InventoryComponent inventory = new InventoryComponent();
 	// TODO (Question 9): add a private field of type InventoryComponent, and initialize it
 	
 	public PacmanPlayer(PacmanGridComponent initialPosition) {
@@ -46,17 +46,20 @@ public class PacmanPlayer extends PacmanGameObject {
 			// TODO (Question 9): replace the two lines below.
 			// Instead of eating (destroying) the bonus, the player should stash it in the inventory,
 			// but only if it is not too heavy to carry. See the assignment for the exact rules.
-			addScore(bonus.bonusScore);
-			other.destroy();
+			if (inventory.getInventory().getTotalWeight() + bonus.getWeight() <= inventory.getMaxWeight()){
+				bonus.getTransformComponent().position = inventory.getInventoryPosition();
+				inventory.getInventory().collect(bonus);
+				addScore(bonus.bonusScore);
+
+			}
 			
 			// Hint: every PacmanBonus is also a Collectible
-			Collectible collectible = (Collectible) other;
 		}
 	}
 	
 	public InventoryComponent getInventoryComponent() {
 		// TODO (Question 9): return the InventoryComponent field
-		return null;
+		return inventory;
 	}
 	
 	public void addScore(int bonus) {
